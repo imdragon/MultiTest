@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/backdropImageView"
+                android:layout_width="match_parent"
+                android:layout_height="205dp"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/original_title_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@id/backdropImageView"
+                android:background="@android:color/transparent"
+                android:paddingLeft="16dp"
+                android:paddingRight="50dp"
+                android:text="The Movie Title"
+                android:textColor="@android:color/white"
+                android:textSize="34sp" />
+            <!--android:textColor="#cecece"-->
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:paddingRight="8dp">
+
+                <ImageView
+                    android:id="@+id/mPoster"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:padding="1dp"
+                    android:src="@drawable/comingsoon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:id="@+id/releaseDate"
+                    style="@style/appText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="released August 2015"
+                    android:textAppearance="@android:style/TextAppearance.Material.Large"
+                    android:textStyle="bold" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="?android:ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="10" />
+
+                <TextView
+                    android:id="@+id/ratingDetail"
+                    style="@style/appText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5/7"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Runtime" />
+
+                <Button
+                    android:id="@+id/favButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00ffff"
+                    android:onClick="addFavorite"
+                    android:text="Mark as\nFavorite"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/synopsis"
+            style="@style/appText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="A bunch of random text right here for the mean time so that we can replace it later with the actual synopsis"
+            android:textStyle="italic" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:background="@android:color/white" />
+
+
+        <TextView
+            android:id="@+id/trailerLink"
+            style="@style/appText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@android:drawable/ic_media_play"
+            android:onClick="watchTrailer"
+            android:text="Watch the trailer!"
+            android:textSize="24sp"
+            android:visibility="invisible" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:background="@android:color/white" />
+
+        <TextView
+            style="@style/appText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Reviews"
+            android:textSize="24sp" />
+
+        <ListView
+            android:id="@+id/reviewsListView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:divider="@drawable/line"
+            android:dividerHeight="1dp" />
+
+    </LinearLayout>
+
+</ScrollView>
