@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.TextView;
 
 /**
  * Created by Admin on 4/7/2016.
@@ -45,11 +46,13 @@ public class DetailsActivity extends Activity {
         }
 
         if(savedInstanceState == null){
-            setContentView(R.layout.details_view);
+//            setContentView(R.layout.details_view);
 
-//            DetailsFragment details = new DetailsFragment();
-//            details.setArguments(getIntent().getExtras());
-//            getFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
+            DetailsFragment details = new DetailsFragment();
+            details.setArguments(getIntent().getExtras());
+            getFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
+
+
         }
     }
 }

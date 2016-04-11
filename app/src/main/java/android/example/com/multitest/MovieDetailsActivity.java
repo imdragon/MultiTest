@@ -1,27 +1,15 @@
 package android.example.com.multitest;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-public class DetailsFragment extends Fragment {
 
-    public static DetailsFragment newInstance(int index) {
-        DetailsFragment f = new DetailsFragment();
-        Bundle args = new Bundle();
-        args.putInt("index", index);
-        f.setArguments(args);
 
-        return f;
-    }
-
-    public int getShownIndex() {
-        return getArguments().getInt("index", 0);
-    }
+public class MovieDetailsActivity extends Fragment {
 
     /**
      * Called to have the fragment instantiate its user interface view.
@@ -43,22 +31,9 @@ public class DetailsFragment extends Fragment {
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-//        ScrollView scroller = new ScrollView(getActivity());
-//
-//        TextView text = new TextView(getActivity());
-//
-//        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getActivity().getResources().getDisplayMetrics());
-//        text.setPadding(padding, padding, padding, padding);
-//        scroller.addView(text);
-//        text.setText(SuperHeroInfo.HISTORY[getShownIndex()]);
-//        return scroller;
-        View mDetailsView = inflater.inflate(R.layout.details_view, container, false);
-        TextView mtext = (TextView) mDetailsView.findViewById(R.id.original_title_detail);
-        mtext.setText(SuperHeroInfo.HISTORY[getShownIndex()]);
-
-
-        return mDetailsView;
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        return super.onCreateView(inflater, container, savedInstanceState);
+    return inflater.inflate(R.layout.details_view, container, false);
     }
 }
+

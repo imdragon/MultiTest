@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 // Shows the title fragment which is a ListView
 // When a ListView item is selected we will put the DetailsFragment in the
@@ -55,7 +56,7 @@ public class TitlesFragments extends ListFragment {
             getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
             // Send the item selected to showDetails so the right hero info is shown
-            showDetails(mCurCheckPosition);
+//            showDetails(2);
         }
     }
 
@@ -72,6 +73,7 @@ public class TitlesFragments extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         showDetails(position);
+//        Toast.makeText(getActivity(), " "+position, Toast.LENGTH_SHORT).show();
     }
 
     // Shows the hero data
@@ -99,12 +101,14 @@ public class TitlesFragments extends ListFragment {
 
                 // Make the details fragment and give it the currently selected hero index
                 details = DetailsFragment.newInstance(index);
+//                MovieDetailsActivity mvdets = new MovieDetailsActivity();
 
                 // Start Fragment transactions
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                 // Replace any other Fragment with our new Details Fragment with the right data
                 ft.replace(R.id.details, details);
+//                ft.replace(R.id.details, mvdets);
 
                 // TRANSIT_FRAGMENT_FADE calls for the Fragment to fade away
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -119,6 +123,7 @@ public class TitlesFragments extends ListFragment {
             intent.setClass(getActivity(), DetailsActivity.class);
 
             // Pass along the currently selected index assigned to the keyword index
+            // Put parcelable here!
             intent.putExtra("index", index);
 
             // Call for the Activity to open
