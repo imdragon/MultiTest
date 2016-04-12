@@ -71,9 +71,9 @@ public class DetailsFragment extends Fragment {
 //        scroller.addView(text);
 //        text.setText(SuperHeroInfo.HISTORY[getShownIndex()]);
 //        return scroller;
-
-//        details = bundle.getParcelable("movieInfo");
-        details = ((DetailsActivity) getActivity()).getMovieDetails();
+Bundle bundle = getArguments();
+        details = bundle.getParcelable("movieInfo");
+//        details = ((DetailsActivity) getActivity()).getMovieDetails();
         View mDetailsView = inflater.inflate(R.layout.details_view, container, false);
         TextView mtext = (TextView) mDetailsView.findViewById(R.id.original_title_detail);
         mtext.setText("It worked!");

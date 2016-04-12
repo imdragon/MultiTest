@@ -42,7 +42,7 @@ public class PostersFragment extends Fragment {
         } else {
             moviePosterAddress = savedInstanceState.getStringArrayList("posters");
             movieObjectArray = savedInstanceState.getParcelableArrayList("movies");
-            setupGrid();
+//            setupGrid();
             Log.e("NOT NULL", "NOT NULL");
         }
         return view;
