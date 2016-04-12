@@ -11,6 +11,8 @@ import android.widget.TextView;
  */
 public class DetailsActivity extends Activity {
 
+    Movie mDetails = new Movie();
+
     /**
      * Called when the activity is starting.  This is where most initialization
      * should go: calling {@link #setContentView(int)} to inflate the
@@ -40,19 +42,23 @@ public class DetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
             return;
         }
 
-        if(savedInstanceState == null){
-//            setContentView(R.layout.details_view);
-
+        if (savedInstanceState == null) {
             DetailsFragment details = new DetailsFragment();
-            details.setArguments(getIntent().getExtras());
+
             getFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
 
 
         }
+    }
+
+    public Movie getMovieDetails() {
+        Movie details = getIntent().getParcelableExtra("movieInfo");
+
+        return details;
     }
 }

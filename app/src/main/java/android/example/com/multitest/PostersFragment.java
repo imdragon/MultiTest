@@ -51,16 +51,17 @@ public class PostersFragment extends Fragment {
     public void setupGrid() {
         gridView.setAdapter(new ImageAdapter(getActivity(), moviePosterAddress));
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Movie movieDetails = movieObjectArray.get(position);
-                Log.e("movieID", movieObjectArray.get(position).getMovieId());
-                Intent i = new Intent(getActivity(), PostersFragment.class);
-                i.putExtra("movieInfo", movieDetails);
-                startActivity(i);
-            }
-        });}
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> parent, View v,
+//                                    int position, long id) {
+//                Movie movieDetails = movieObjectArray.get(position);
+//                Log.e("movieID", movieObjectArray.get(position).getMovieId());
+//                Intent i = new Intent(getActivity(), DetailsActivity.class);
+//                i.putExtra("movieInfo", movieDetails);
+//                startActivity(i);
+//            }
+//        });
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -73,17 +74,19 @@ public class PostersFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long arg3) {
                 if (!isDualPane) {
-                    Movie movieDetails = movieObjectArray.get(position);
-                    Log.e("movieID", movieObjectArray.get(position).getMovieId());
-                    Intent i = new Intent(getActivity(), PostersFragment.class);
+                    Movie movieDetails = movieObjectArray.get(pos);
+                    Log.e("movieID", movieObjectArray.get(pos).getMovieId());
+                    Intent i = new Intent(getActivity(), DetailsActivity.class);
                     i.putExtra("movieInfo", movieDetails);
                     startActivity(i);
                 } else {
                     DetailsFragment detailFragment = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
 
                     if (detailFragment == null || detailFragment.getShownIndex() != pos) {
+                        Movie movieDetails = movieObjectArray.get(pos);
+                        Log.e("movieID", movieObjectArray.get(pos).getMovieId());
 
-                        detailFragment = DetailsFragment.newInstance(pos);
+                        detailFragment = DetailsFragment.newInstance(pos, movieDetails);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                         ft.replace(R.id.details, detailFragment);
