@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/titles"
-        class="android.example.com.multitest.TitlesFragments"
+        class="android.example.com.multitest.PostersFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />

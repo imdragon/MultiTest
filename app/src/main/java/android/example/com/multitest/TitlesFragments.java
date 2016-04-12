@@ -101,7 +101,6 @@ public class TitlesFragments extends ListFragment {
 
                 // Make the details fragment and give it the currently selected hero index
                 details = DetailsFragment.newInstance(index);
-//                MovieDetailsActivity mvdets = new MovieDetailsActivity();
 
                 // Start Fragment transactions
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
