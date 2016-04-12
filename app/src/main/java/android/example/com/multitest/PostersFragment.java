@@ -20,21 +20,21 @@ import java.util.ArrayList;
 public class PostersFragment extends Fragment {
     Boolean isDualPane;
     GridView gridView;
-    ListView listView;
-    int position;
+
     protected ArrayList<String> moviePosterAddress = new ArrayList<>();
     public ArrayList<Movie> movieObjectArray;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.gridview, container, false);
-
         gridView = (GridView) view.findViewById(R.id.gridview);
         if (savedInstanceState == null) {
             new RequestPopularMovies(this).execute("popularity.desc", null, null);
@@ -42,7 +42,7 @@ public class PostersFragment extends Fragment {
         } else {
             moviePosterAddress = savedInstanceState.getStringArrayList("posters");
             movieObjectArray = savedInstanceState.getParcelableArrayList("movies");
-//            setupGrid();
+            setupGrid();
             Log.e("NOT NULL", "NOT NULL");
         }
         return view;
@@ -98,5 +98,13 @@ public class PostersFragment extends Fragment {
         });
 
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.e("SAVEDiN", "SAVEDiN");
+        outState.putStringArrayList("posters", moviePosterAddress);
+        outState.putParcelableArrayList("movies", movieObjectArray);
+        super.onSaveInstanceState(outState);
     }
 }
