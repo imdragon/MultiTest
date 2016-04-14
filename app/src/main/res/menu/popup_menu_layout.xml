@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:MultiTest="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.android.popularmovies.MainActivity">
+
+
+    <item
+        android:id="@+id/sortChoice"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/sort_option"
+        android:visible="true"
+        MultiTest:showAsAction="always" />
+    <item
+        android:id="@+id/deleteAllFavorites"
+        android:title="Delete Favorites" />
+</menu>

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MultiTest</string>
+
+<string name="sort_option">Sort Method</string>
+<string name="popularity">Most Popular</string>
+<string name="rating">Highest Rated</string>
+
+<array name="sortOptionArray">
+    <item>Popularity</item>
+    <item>Highest Rated</item>
+    <item>My Favorites</item>
+</array>
+<string name="title_activity_movie_details">MovieDetailsActivity</string>
+<string name="title_activity_favorites">Favorites</string>
 </resources>

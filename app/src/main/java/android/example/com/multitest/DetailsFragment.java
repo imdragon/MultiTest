@@ -74,7 +74,7 @@ public class DetailsFragment extends Fragment {
 Bundle bundle = getArguments();
         details = bundle.getParcelable("movieInfo");
 //        details = ((DetailsActivity) getActivity()).getMovieDetails();
-        View mDetailsView = inflater.inflate(R.layout.details_view, container, false);
+        View mDetailsView = inflater.inflate(R.layout.details_view_landscape, container, false);
         TextView mtext = (TextView) mDetailsView.findViewById(R.id.original_title_detail);
         mtext.setText("It worked!");
 
