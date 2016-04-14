@@ -1,7 +1,11 @@
 package android.example.com.multitest;
 
 import android.app.Fragment;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -15,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -74,10 +79,7 @@ public class DetailsFragment extends Fragment {
 Bundle bundle = getArguments();
         details = bundle.getParcelable("movieInfo");
 //        details = ((DetailsActivity) getActivity()).getMovieDetails();
-        View mDetailsView = inflater.inflate(R.layout.details_view_landscape, container, false);
-        TextView mtext = (TextView) mDetailsView.findViewById(R.id.original_title_detail);
-        mtext.setText("It worked!");
-
+        final View mDetailsView = inflater.inflate(R.layout.details_view, container, false);
 
 //        details = getIntent().getParcelableExtra("movieInfo");
 //        rAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, reviews);
@@ -117,11 +119,86 @@ Bundle bundle = getArguments();
         TextView mRating = (TextView) mDetailsView.findViewById(R.id.ratingDetail);
 
         fButton = (Button) mDetailsView.findViewById(R.id.favButton);
+        fButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFavorite(v);
+            }
+        });
 
         RatingBar mRatingBar = (RatingBar) mDetailsView.findViewById(R.id.ratingBar);
         mRatingBar.setRating(Float.valueOf(details.getRating()));
         mRating.setText("Rating: " + details.getRating() + "/10");
+        new getTrailerOrReviews(DetailsFragment.this).execute(0, null, null);
+        favoriteCheck();
 
-        return mDetailsView;
+        return mDetailsView;}
+
+
+
+    public void addFavorite(View v) {
+
+        ContentValues fav = new ContentValues();
+
+        fav.put(MovDBContract.MovieEntry.COLUMN_MOVIEID, details.getMovieId());
+        fav.put(MovDBContract.MovieEntry.COLUMN_TITLE, details.getTitle());
+        fav.put(MovDBContract.MovieEntry.COLUMN_DESCRIPTION, details.getSynopsis());
+        fav.put(MovDBContract.MovieEntry.COLUMN_POSTER, details.getPoster());
+        fav.put(MovDBContract.MovieEntry.COLUMN_BACKDROP, details.getBackdrop());
+        fav.put(MovDBContract.MovieEntry.COLUMN_RATING, details.getRating());
+        fav.put(MovDBContract.MovieEntry.COLUMN_RELEASE, details.getReleaseDate());
+        fav.put(MovDBContract.MovieEntry.COLUMN_FAVORITE, "favorite");
+
+        Uri rUri = getActivity().getContentResolver().insert(MovDBContract.MovieEntry.CONTENT_URI, fav);
+        if (rUri == null) {
+            removeFavorite();
+        } else {
+            Toast.makeText(getActivity(), rUri.toString(), Toast.LENGTH_SHORT).show();
+            fButton.setBackgroundColor(Color.YELLOW);
+            fButton.setText("Favorite!");
+        }
+    }
+
+    private Boolean favoriteCheck() {
+        Boolean flag = false;
+        Cursor cs = getActivity().getContentResolver().query(MovDBContract.MovieEntry.CONTENT_URI, new String[]{MovDBContract.MovieEntry.COLUMN_MOVIEID}, null, null, null);
+        if (cs == null) {
+            return flag;
+        } else {
+            while (cs.moveToNext()) {
+                if (cs.getString(0).equals(details.getMovieId())) {
+                    fButton.setBackgroundColor(Color.YELLOW);
+                    fButton.setText("Favorite!");
+                    flag = true;
+                } else {
+                    flag = false;
+                }
+            }
+        }
+        return flag;
+    }
+
+    private void removeFavorite() {
+        getActivity().getContentResolver().delete(MovDBContract.MovieEntry.CONTENT_URI, MovDBContract.MovieEntry.COLUMN_MOVIEID + "=?", new String[]{details.getMovieId()});
+        fButton.setText("Mark as\nfavorite");
+        fButton.setBackgroundColor(Color.CYAN);
+
+    }
+
+    public void watchTrailer(View v) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + trailerLink)));
+    }
+
+    public void myClickMethod(View v) {
+        switch(v.getId()) {
+            case R.id.trailerLink:
+              watchTrailer(v);
+                break;
+            case R.id.favButton:
+                addFavorite(v);
+                break;
+
+            // Just like you were doing
+        }
     }
 }

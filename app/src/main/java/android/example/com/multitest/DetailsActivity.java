@@ -1,9 +1,11 @@
 package android.example.com.multitest;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -42,6 +44,7 @@ public class DetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
             return;
@@ -58,6 +61,7 @@ public class DetailsActivity extends Activity {
 
     public Movie getMovieDetails() {
         Movie details = getIntent().getParcelableExtra("movieInfo");
+
 
         return details;
     }
