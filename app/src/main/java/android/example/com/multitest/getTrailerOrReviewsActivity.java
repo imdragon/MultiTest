@@ -19,13 +19,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class getTrailerOrReviews extends AsyncTask<Integer, Void, Void> {
-    Fragment callingActivity;
+public class getTrailerOrReviewsActivity extends AsyncTask<Integer, Void, Void> {
+    Activity callingActivity;
 
     StringBuilder total = new StringBuilder();
     String firstTrailer;
 
-    public getTrailerOrReviews(Fragment activity) {
+    public getTrailerOrReviewsActivity(Activity activity) {
         callingActivity = activity;
     }
 
@@ -47,7 +47,7 @@ public class getTrailerOrReviews extends AsyncTask<Integer, Void, Void> {
      */
     @Override
     protected Void doInBackground(Integer... params) {
-        String mID = ((DetailsFragment) callingActivity).details.getMovieId();
+        String mID = ((MovieDetailsActivity) callingActivity).details.getMovieId();
         String parameterTorR = new String();
 
         for (int i = 0; i < 2; i++) {
@@ -89,7 +89,7 @@ public class getTrailerOrReviews extends AsyncTask<Integer, Void, Void> {
         for (int i = 0; i < trailers.length(); i++) {
             JSONObject trailer = trailers.getJSONObject(i);
             firstTrailer = trailer.getString("key");
-            ((DetailsFragment) callingActivity).trailerLink = firstTrailer;
+            ((MovieDetailsActivity) callingActivity).trailerLink = firstTrailer;
         }
     }
 
@@ -102,20 +102,17 @@ public class getTrailerOrReviews extends AsyncTask<Integer, Void, Void> {
             sb.append(review.getString("content"));
             sb.append("\nReview by:\t");
             sb.append(review.getString("author"));
-            ((DetailsFragment) callingActivity).reviews.add(sb.toString());
+            ((MovieDetailsActivity) callingActivity).reviews.add(sb.toString());
         }
-        ((DetailsFragment) callingActivity).rAdapter.notifyDataSetChanged();
+        ((MovieDetailsActivity) callingActivity).rAdapter.notifyDataSetChanged();
 //        ((DetailsFragment)callingActivity).popReviews();
 
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        int orientation = callingActivity.getResources().getConfiguration().orientation;
-        // TODO: 4/28/2016  Add a check for fragment being attached to activity.  Perhaps store movie in movie object and then update from there.
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE){
-        TextView mTrailer = (TextView) callingActivity.getActivity().findViewById(R.id.trailerLink);
-        mTrailer.setVisibility(View.VISIBLE);}
+            TextView mTrailer = (TextView) callingActivity.findViewById(R.id.trailerLink);
+
+            mTrailer.setVisibility(View.VISIBLE);}
 
     }
-}

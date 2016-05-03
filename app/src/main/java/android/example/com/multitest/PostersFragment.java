@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 public class PostersFragment extends Fragment {
     Boolean isDualPane;
     GridView gridView;
+    int selectedMovie = 0;
 
     protected ArrayList<String> moviePosterAddress = new ArrayList<>();
     public ArrayList<Movie> movieObjectArray;
@@ -170,12 +173,12 @@ public class PostersFragment extends Fragment {
         gridView.setAdapter(new ImageAdapter(getActivity(), moviePosterAddress));
 
         //
-        DetailsFragment detailFragment = DetailsFragment.newInstance(0, movieObjectArray.get(0));
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-        ft.replace(R.id.details, detailFragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
+//        DetailsFragment detailFragment = DetailsFragment.newInstance(0, movieObjectArray.get(selectedMovie));
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//
+//        ft.replace(R.id.details, detailFragment);
+//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//        ft.commit();
         //
 //        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            public void onItemClick(AdapterView<?> parent, View v,
@@ -191,40 +194,54 @@ public class PostersFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         View detailFrame = getActivity().findViewById(R.id.details);
+        if (savedInstanceState != null) {
+            selectedMovie = savedInstanceState.getInt("lastChoice", 0);
+        }
 
         isDualPane = detailFrame != null && detailFrame.getVisibility() == View.VISIBLE;
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long arg3) {
-                if (!isDualPane) {
-                    Movie movieDetails = movieObjectArray.get(pos);
-                    Log.e("movieID", movieObjectArray.get(pos).getMovieId());
-                    Intent i = new Intent(getActivity(), DetailsActivity.class);
-                    i.putExtra("movieInfo", movieDetails);
-                    startActivity(i);
-                } else {
-                    DetailsFragment detailFragment = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
-
-                    if (detailFragment == null || detailFragment.getShownIndex() != pos) {
-                        Movie movieDetails = movieObjectArray.get(pos);
-                        Log.e("movieID", movieObjectArray.get(pos).getMovieId());
-
-                        detailFragment = DetailsFragment.newInstance(pos, movieDetails);
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-                        ft.replace(R.id.details, detailFragment);
-                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                        ft.commit();
-                    }
-                }
+//                DetailsFragment detailFragment = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
+                showMovieDetails(pos);
             }
         });
+    }
 
-        super.onActivityCreated(savedInstanceState);
+    void showMovieDetails(int pos) {
+        selectedMovie = pos;
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+            DetailsFragment detailFragment = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
+
+            if (detailFragment == null || detailFragment.getShownIndex() != pos) {
+                //bundle with fragment fix
+                Bundle movDetails = new Bundle();
+                Movie movieDetails = movieObjectArray.get(pos);
+                Log.e("movieID", movieObjectArray.get(pos).getMovieId());
+                movDetails.putParcelable("movieInfo", movieDetails);
+                detailFragment = DetailsFragment.newInstance(pos, movieDetails);
+                detailFragment.setArguments(movDetails);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                ft.replace(R.id.details, detailFragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+            }
+        } else {
+            Movie movieDetails = movieObjectArray.get(pos);
+            Log.e("movieID", movieObjectArray.get(pos).getMovieId());
+            Intent i = new Intent(getActivity(), DetailsActivity.class);
+            i.putExtra("movieInfo", movieDetails);
+            startActivity(i);
+
+        }
     }
 
     @Override
@@ -232,6 +249,7 @@ public class PostersFragment extends Fragment {
         Log.e("SAVEDiN", "SAVEDiN");
         outState.putStringArrayList("posters", moviePosterAddress);
         outState.putParcelableArrayList("movies", movieObjectArray);
+        outState.putInt("lastChoice", selectedMovie);
         super.onSaveInstanceState(outState);
     }
 }

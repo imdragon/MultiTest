@@ -98,9 +98,9 @@ public class TitlesFragments extends ListFragment {
             // it is supposed to show is passed to it. If that index hasn't been assigned we must
             // assign it in the if block
             if (details == null || details.getShownIndex() != index) {
-Movie test = new Movie();
+                Movie test = new Movie();
                 // Make the details fragment and give it the currently selected hero index
-                details = DetailsFragment.newInstance(index,test );
+                details = DetailsFragment.newInstance(index, test);
 
                 // Start Fragment transactions
                 FragmentTransaction ft = getFragmentManager().beginTransaction();

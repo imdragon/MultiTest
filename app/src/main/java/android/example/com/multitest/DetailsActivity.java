@@ -47,8 +47,10 @@ public class DetailsActivity extends Activity {
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
+
             return;
         }
+
 
         if (savedInstanceState == null) {
             DetailsFragment details = new DetailsFragment();

@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class DetailsFragment extends Fragment {
@@ -31,6 +33,7 @@ public class DetailsFragment extends Fragment {
     Button fButton;
     ArrayList<String> reviews = new ArrayList<String>();
     ArrayAdapter<String> rAdapter;
+    ArrayList<String> samples = new ArrayList<>();
 
     public static DetailsFragment newInstance(int index, Movie movieInfo) {
         DetailsFragment f = new DetailsFragment();
@@ -67,23 +70,26 @@ public class DetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-//        ScrollView scroller = new ScrollView(getActivity());
-//
-//        TextView text = new TextView(getActivity());
-//
-//        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getActivity().getResources().getDisplayMetrics());
-//        text.setPadding(padding, padding, padding, padding);
-//        scroller.addView(text);
-//        text.setText(SuperHeroInfo.HISTORY[getShownIndex()]);
-//        return scroller;
-Bundle bundle = getArguments();
-        details = bundle.getParcelable("movieInfo");
+        Bundle bundle = getArguments();
+
+//        details = bundle.getParcelable("movieInfo");
+        //  experimental
+        if (getActivity().getIntent() == null) {
+            details = getArguments().getParcelable("movieInfo");
+        } else {
+            details = getActivity().getIntent().getParcelableExtra("movieInfo");
+        }
+        
+        
+        // end experimental
 //        details = ((DetailsActivity) getActivity()).getMovieDetails();
         final View mDetailsView = inflater.inflate(R.layout.details_view, container, false);
 
 //        details = getIntent().getParcelableExtra("movieInfo");
-//        rAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, reviews);
+        rAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, reviews);
+
         ListView reviewsList = (ListView) mDetailsView.findViewById(R.id.reviewsListView);
+        reviewsList.setBackgroundColor(Color.WHITE);
         reviewsList.setOnTouchListener(new View.OnTouchListener() {
             /**
              * Called when a touch event is dispatched to a view. This allows listeners to
@@ -101,7 +107,7 @@ Bundle bundle = getArguments();
                 return false;
             }
         });
-        reviewsList.setAdapter(rAdapter)    ;
+
         TextView mTitle = (TextView) mDetailsView.findViewById(R.id.original_title_detail);
         mTitle.setText(details.getTitle());
         mTitle.setShadowLayer(25, 0, 0, Color.BLACK);
@@ -129,11 +135,24 @@ Bundle bundle = getArguments();
         RatingBar mRatingBar = (RatingBar) mDetailsView.findViewById(R.id.ratingBar);
         mRatingBar.setRating(Float.valueOf(details.getRating()));
         mRating.setText("Rating: " + details.getRating() + "/10");
+        TextView trailerText = (TextView) mDetailsView.findViewById(R.id.trailerLink);
+        trailerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                watchTrailer(v);
+            }
+        });
+        reviewsList.setAdapter(rAdapter);
         new getTrailerOrReviews(DetailsFragment.this).execute(0, null, null);
         favoriteCheck();
 
-        return mDetailsView;}
+        return mDetailsView;
+    }
 
+    public void popReviews() {
+        rAdapter.notifyDataSetInvalidated();
+        rAdapter.notifyDataSetChanged();
+    }
 
 
     public void addFavorite(View v) {
@@ -190,9 +209,9 @@ Bundle bundle = getArguments();
     }
 
     public void myClickMethod(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.trailerLink:
-              watchTrailer(v);
+                watchTrailer(v);
                 break;
             case R.id.favButton:
                 addFavorite(v);
