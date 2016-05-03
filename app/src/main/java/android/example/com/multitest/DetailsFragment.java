@@ -73,18 +73,18 @@ public class DetailsFragment extends Fragment {
         Bundle bundle = getArguments();
 
 //        details = bundle.getParcelable("movieInfo");
-        //  experimental
-        if (getActivity().getIntent() == null) {
-            details = getArguments().getParcelable("movieInfo");
-        } else {
-            details = getActivity().getIntent().getParcelableExtra("movieInfo");
-        }
-        
-        
-        // end experimental
+
 //        details = ((DetailsActivity) getActivity()).getMovieDetails();
         final View mDetailsView = inflater.inflate(R.layout.details_view, container, false);
+        //  experimental
+        if (getArguments() == null) {
+            details = getActivity().getIntent().getParcelableExtra("movieInfo");
+        } else {
+            details = getArguments().getParcelable("movieInfo");
+        }
 
+
+        // end experimental
 //        details = getIntent().getParcelableExtra("movieInfo");
         rAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, reviews);
 

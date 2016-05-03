@@ -220,13 +220,13 @@ public class PostersFragment extends Fragment {
 
             DetailsFragment detailFragment = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
 
-            if (detailFragment == null || detailFragment.getShownIndex() != pos) {
+            if (detailFragment == null || detailFragment.getShownIndex() != selectedMovie) {
                 //bundle with fragment fix
                 Bundle movDetails = new Bundle();
-                Movie movieDetails = movieObjectArray.get(pos);
+                Movie movieDetails = movieObjectArray.get(selectedMovie);
                 Log.e("movieID", movieObjectArray.get(pos).getMovieId());
                 movDetails.putParcelable("movieInfo", movieDetails);
-                detailFragment = DetailsFragment.newInstance(pos, movieDetails);
+                detailFragment = DetailsFragment.newInstance(selectedMovie, movieDetails);
                 detailFragment.setArguments(movDetails);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
