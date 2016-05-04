@@ -22,11 +22,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by Admin on 4/11/2016.
- */
 public class PostersFragment extends Fragment {
-    Boolean isDualPane;
+    Boolean isDualPane = false;
     GridView gridView;
     int selectedMovie = 0;
 
@@ -148,6 +145,7 @@ public class PostersFragment extends Fragment {
                 tempMovie.setMovieId(cs.getString(1));
                 movieObjectArray.add(tempMovie);
             }
+            cs.close();
             setupGrid();
         }
     }
@@ -215,12 +213,11 @@ public class PostersFragment extends Fragment {
 
     void showMovieDetails(int pos) {
         selectedMovie = pos;
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (isDualPane) {
 
             DetailsFragment detailFragment = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
 
-            if (detailFragment == null || detailFragment.getShownIndex() != selectedMovie) {
+            if (isDualPane || detailFragment.getShownIndex() != selectedMovie) {
                 //bundle with fragment fix
                 Bundle movDetails = new Bundle();
                 Movie movieDetails = movieObjectArray.get(selectedMovie);

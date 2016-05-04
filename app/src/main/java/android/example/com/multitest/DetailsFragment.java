@@ -194,6 +194,7 @@ public class DetailsFragment extends Fragment {
                 }
             }
         }
+        cs.close();
         return flag;
     }
 
