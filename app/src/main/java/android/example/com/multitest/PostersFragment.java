@@ -215,7 +215,7 @@ public class PostersFragment extends Fragment {
         Movie movieDetails = movieObjectArray.get(selectedMovie);
         Log.e("movieID", movieObjectArray.get(selectedMovie).getMovieId());
         movDetails.putParcelable("movieInfo", movieDetails);
-        DetailsFragment detailFragment = DetailsFragment.newInstance(selectedMovie, movieDetails);
+        DetailsFragment detailFragment = DetailsFragment.newInstance(movieDetails);
         detailFragment.setArguments(movDetails);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 

@@ -23,8 +23,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class DetailsFragment extends Fragment {
@@ -33,19 +31,14 @@ public class DetailsFragment extends Fragment {
     Button fButton;
     ArrayList<String> reviews = new ArrayList<String>();
     ArrayAdapter<String> rAdapter;
-    ArrayList<String> samples = new ArrayList<>();
 
-    public static DetailsFragment newInstance(int index, Movie movieInfo) {
+    public static DetailsFragment newInstance(Movie movieInfo) {
         DetailsFragment f = new DetailsFragment();
         Bundle args = new Bundle();
         args.putParcelable("movieInfo", movieInfo);
         f.setArguments(args);
 
         return f;
-    }
-
-    public int getShownIndex() {
-        return getArguments().getInt("index", 0);
     }
 
     /**
@@ -70,26 +63,17 @@ public class DetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
 
-//        details = bundle.getParcelable("movieInfo");
-
-//        details = ((DetailsActivity) getActivity()).getMovieDetails();
         final View mDetailsView = inflater.inflate(R.layout.details_view, container, false);
-        //  experimental
+        //  check if coming from intent
         if (getArguments() == null) {
             details = getActivity().getIntent().getParcelableExtra("movieInfo");
         } else {
             details = getArguments().getParcelable("movieInfo");
         }
-
-
-        // end experimental
-//        details = getIntent().getParcelableExtra("movieInfo");
         rAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, reviews);
 
         ListView reviewsList = (ListView) mDetailsView.findViewById(R.id.reviewsListView);
-        reviewsList.setBackgroundColor(Color.WHITE);
         reviewsList.setOnTouchListener(new View.OnTouchListener() {
             /**
              * Called when a touch event is dispatched to a view. This allows listeners to
@@ -149,12 +133,6 @@ public class DetailsFragment extends Fragment {
         return mDetailsView;
     }
 
-    public void popReviews() {
-        rAdapter.notifyDataSetInvalidated();
-        rAdapter.notifyDataSetChanged();
-    }
-
-
     public void addFavorite(View v) {
 
         ContentValues fav = new ContentValues();
@@ -207,18 +185,5 @@ public class DetailsFragment extends Fragment {
 
     public void watchTrailer(View v) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + trailerLink)));
-    }
-
-    public void myClickMethod(View v) {
-        switch (v.getId()) {
-            case R.id.trailerLink:
-                watchTrailer(v);
-                break;
-            case R.id.favButton:
-                addFavorite(v);
-                break;
-
-            // Just like you were doing
-        }
     }
 }
