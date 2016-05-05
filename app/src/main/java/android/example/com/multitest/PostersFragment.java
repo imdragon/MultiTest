@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,15 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class PostersFragment extends Fragment {
-    Boolean isDualPane = false;
+    boolean isDualPane;
     GridView gridView;
     int selectedMovie = 0;
+
 
     protected ArrayList<String> moviePosterAddress = new ArrayList<>();
     public ArrayList<Movie> movieObjectArray;
@@ -33,9 +32,7 @@ public class PostersFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         setHasOptionsMenu(true);
     }
 
@@ -131,7 +128,7 @@ public class PostersFragment extends Fragment {
                 7 favorite <--- probably don't need it */
         Cursor cs = getActivity().getContentResolver().query(MovDBContract.MovieEntry.CONTENT_URI, mProjection, null, null, null);
         if (cs == null) {
-            Log.e("Output:", String.valueOf(cs.getCount()));
+//            Log.e("Output:", String.valueOf(cs.getCount()));
         } else {
             while (cs.moveToNext()) {
                 moviePosterAddress.add(cs.getString(3));
@@ -161,6 +158,7 @@ public class PostersFragment extends Fragment {
         } else {
             moviePosterAddress = savedInstanceState.getStringArrayList("posters");
             movieObjectArray = savedInstanceState.getParcelableArrayList("movies");
+            selectedMovie = savedInstanceState.getInt("lastChoice", 0);
             setupGrid();
             Log.e("NOT NULL", "NOT NULL");
         }
@@ -169,76 +167,62 @@ public class PostersFragment extends Fragment {
 
     public void setupGrid() {
         gridView.setAdapter(new ImageAdapter(getActivity(), moviePosterAddress));
-
-        //
-//        DetailsFragment detailFragment = DetailsFragment.newInstance(0, movieObjectArray.get(selectedMovie));
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//
-//        ft.replace(R.id.details, detailFragment);
-//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        ft.commit();
-        //
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View v,
-//                                    int position, long id) {
-//                Movie movieDetails = movieObjectArray.get(position);
-//                Log.e("movieID", movieObjectArray.get(position).getMovieId());
-//                Intent i = new Intent(getActivity(), DetailsActivity.class);
-//                i.putExtra("movieInfo", movieDetails);
-//                startActivity(i);
-//            }
-//        });
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        View detailFrame = getActivity().findViewById(R.id.details);
+        View detailsViewCheck = getActivity().findViewById(R.id.details);
+        isDualPane = detailsViewCheck != null && detailsViewCheck.getVisibility() == View.VISIBLE;
+
+
         if (savedInstanceState != null) {
             selectedMovie = savedInstanceState.getInt("lastChoice", 0);
+            if (isDualPane) {
+                updateDetailsFragment();
+            }
         }
-
-        isDualPane = detailFrame != null && detailFrame.getVisibility() == View.VISIBLE;
-
+        Toast.makeText(getActivity().getBaseContext(), String.valueOf(isDualPane), Toast.LENGTH_SHORT).show();
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long arg3) {
-//                DetailsFragment detailFragment = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
                 showMovieDetails(pos);
             }
         });
     }
 
     void showMovieDetails(int pos) {
+
         selectedMovie = pos;
-        if (isDualPane) {
 
-            DetailsFragment detailFragment = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
+        if (!isDualPane) {
 
-            if (isDualPane || detailFragment.getShownIndex() != selectedMovie) {
-                //bundle with fragment fix
-                Bundle movDetails = new Bundle();
-                Movie movieDetails = movieObjectArray.get(selectedMovie);
-                Log.e("movieID", movieObjectArray.get(pos).getMovieId());
-                movDetails.putParcelable("movieInfo", movieDetails);
-                detailFragment = DetailsFragment.newInstance(selectedMovie, movieDetails);
-                detailFragment.setArguments(movDetails);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-                ft.replace(R.id.details, detailFragment);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.commit();
-            }
-        } else {
-            Movie movieDetails = movieObjectArray.get(pos);
-            Log.e("movieID", movieObjectArray.get(pos).getMovieId());
+            Movie movieDetails = movieObjectArray.get(selectedMovie);
+//            Log.e("movieID", movieObjectArray.get(selectedMovie).getMovieId());
             Intent i = new Intent(getActivity(), DetailsActivity.class);
             i.putExtra("movieInfo", movieDetails);
             startActivity(i);
-
+        } else {
+            updateDetailsFragment();
         }
+    }
+
+    public void updateDetailsFragment() {
+        //bundle with fragment fix
+        Bundle movDetails = new Bundle();
+        Movie movieDetails = movieObjectArray.get(selectedMovie);
+        Log.e("movieID", movieObjectArray.get(selectedMovie).getMovieId());
+        movDetails.putParcelable("movieInfo", movieDetails);
+        DetailsFragment detailFragment = DetailsFragment.newInstance(selectedMovie, movieDetails);
+        detailFragment.setArguments(movDetails);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        ft.replace(R.id.details, detailFragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
+
     }
 
     @Override

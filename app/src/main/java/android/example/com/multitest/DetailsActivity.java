@@ -1,19 +1,12 @@
 package android.example.com.multitest;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
-/**
- * Created by Admin on 4/7/2016.
- */
+
 public class DetailsActivity extends Activity {
-
-    Movie mDetails = new Movie();
 
     /**
      * Called when the activity is starting.  This is where most initialization
@@ -44,27 +37,14 @@ public class DetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
-
             return;
         }
 
-
         if (savedInstanceState == null) {
             DetailsFragment details = new DetailsFragment();
-
             getFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
-
-
         }
-    }
-
-    public Movie getMovieDetails() {
-        Movie details = getIntent().getParcelableExtra("movieInfo");
-
-
-        return details;
     }
 }

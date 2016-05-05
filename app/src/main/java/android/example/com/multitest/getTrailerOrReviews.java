@@ -1,14 +1,10 @@
 package android.example.com.multitest;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
-import android.test.ActivityTestCase;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +26,6 @@ public class getTrailerOrReviews extends AsyncTask<Integer, Void, Void> {
     }
 
 
-
     /**
      * Override this method to perform a computation on a background thread. The
      * specified parameters are the parameters passed to {@link #execute}
@@ -48,7 +43,7 @@ public class getTrailerOrReviews extends AsyncTask<Integer, Void, Void> {
     @Override
     protected Void doInBackground(Integer... params) {
         String mID = ((DetailsFragment) callingActivity).details.getMovieId();
-        String parameterTorR = new String();
+        String parameterTorR = "";
 
         for (int i = 0; i < 2; i++) {
             if (i == 0) {
@@ -111,11 +106,12 @@ public class getTrailerOrReviews extends AsyncTask<Integer, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        int orientation = callingActivity.getResources().getConfiguration().orientation;
         // TODO: 4/28/2016  Add a check for fragment being attached to activity.  Perhaps store movie in movie object and then update from there.
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE){
-        TextView mTrailer = (TextView) callingActivity.getActivity().findViewById(R.id.trailerLink);
-        mTrailer.setVisibility(View.VISIBLE);}
+        // Added check to only update link if it exists and also when the fragment is added
+        if (callingActivity.isAdded() && callingActivity.getActivity().findViewById(R.id.trailerLink) != null) {
+            TextView mTrailer = (TextView) callingActivity.getActivity().findViewById(R.id.trailerLink);
+            mTrailer.setVisibility(View.VISIBLE);
+        }
 
     }
 }

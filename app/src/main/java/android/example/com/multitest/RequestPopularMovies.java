@@ -1,6 +1,5 @@
 package android.example.com.multitest;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -81,6 +80,10 @@ public class RequestPopularMovies extends AsyncTask<String, Void, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {((PostersFragment)callingActivity).setupGrid();
+    protected void onPostExecute(Void aVoid) {
+        ((PostersFragment) callingActivity).setupGrid();
+        if(((PostersFragment) callingActivity).isDualPane){
+            ((PostersFragment) callingActivity).updateDetailsFragment();
+        }
     }
 }
